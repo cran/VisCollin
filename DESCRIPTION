@@ -1,6 +1,7 @@
 Package: VisCollin
 Title: Visualizing Collinearity Diagnostics
-Version: 0.1.1
+Version: 0.1.2
+Date: 2023-09-05
 Authors@R: c(person("Michael", "Friendly", , "friendly@yorku.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-3237-0941"))
            )
@@ -11,7 +12,7 @@ Description: Provides methods to calculate diagnostics for multicollinearity amo
   a semi-graphic tableplot of the diagnostics to make warning and danger levels more salient,
   and a "collinearity biplot" of the smallest dimensions of predictor space, where collinearity is most apparent. 
 Depends: R (>= 3.5.0)
-Suggests: car, corrgram, dplyr, lmtest, knitr, tidyr
+Suggests: car, corrgram, corrplot, dplyr, lmtest, knitr, tidyr
 License: GPL (>= 3)
 Language: en-US
 Encoding: UTF-8
@@ -19,8 +20,8 @@ RoxygenNote: 7.2.3
 URL: https://github.com/friendly/VisCollin
 BugReports: https://github.com/friendly/VisCollin/issues
 NeedsCompilation: no
-Packaged: 2023-08-16 17:34:22 UTC; friendly
+Packaged: 2023-09-05 15:50:59 UTC; friendly
 Author: Michael Friendly [aut, cre] (<https://orcid.org/0000-0002-3237-0941>)
 Maintainer: Michael Friendly <friendly@yorku.ca>
 Repository: CRAN
-Date/Publication: 2023-08-17 07:52:41 UTC
+Date/Publication: 2023-09-05 16:10:02 UTC

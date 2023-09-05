@@ -8,13 +8,14 @@ stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecy
 [![CRAN](https://www.r-pkg.org/badges/version/VisCollin)](https://cran.r-project.org/package=VisCollin)
 [![Last
 Commit](https://img.shields.io/github/last-commit/friendly/VisCollin)](https://github.com/friendly/VisCollin)
+[![Downloads](https://cranlogs.r-pkg.org/badges/statquotes?color=brightgreen)](https://www.r-pkg.org:443/pkg/VisCollin)
 <!-- badges: end -->
 
 # VisCollin <img src="man/figures/logo.png" style="float:right; height:200px;" />
 
 **Visualizing Collinearity Diagnostics**
 
-Version 0.1.1
+Version 0.1.2
 
 The `VisCollin` package provides methods to calculate diagnostics for
 multicollinearity among predictors in a linear or generalized linear
@@ -33,13 +34,10 @@ These include:
 
 ## Installation
 
-`VisCollin` is not yet on CRAN. You can install the development version
-of VisCollin from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("remotes")
-remotes::install_github("friendly/VisCollin")
-```
+|                     |                                                 |
+|---------------------|-------------------------------------------------|
+| CRAN version        | `install.packages("VisCollin")`                 |
+| Development version | `remotes::install_github("friendly/VisCollin")` |
 
 ## Tutorial example
 
@@ -48,7 +46,7 @@ library(VisCollin)
 library(dplyr)
 library(tidyr)
 library(car)
-library(corrgram)
+library(corrplot)
 ```
 
 This example uses the `cars` data set containing various measures of
@@ -148,11 +146,11 @@ R <- cars |>
 #> year          -36    -38   -42    -32    30  100
 ```
 
-Or, better yet, use `corrgram::corrgram()` to visualize them, using
-color and shading of glyphs,
+Or, better yet, use `corrplot::corrplot.mixed()` to visualize them,
+using color and shading of glyphs,
 
 ``` r
-corrgram(R, upper.panel = panel.pie)
+corrplot.mixed(R, lower = "square", upper = "ellipse", tl.col = "black")
 ```
 
 <img src="man/figures/README-cars-corrgram-1.png" width="60%" />
@@ -168,7 +166,7 @@ the standard errors of the estimated coefficients and are proportional
 to $1 / (1 - R^2_{x_j | \text{others}})$.
 
 We check the variance inflation factors, using `car::vif()`. We see that
-most predictors have very high VIFs, indicating severe
+most predictors have very high VIFs, indicating moderately severe
 multicollinearity.
 
 ``` r
@@ -181,10 +179,10 @@ sqrt(vif(cars.mod))
 #>     3.26     4.43     3.07     3.28     1.62     1.12
 ```
 
-According to $\sqrt{VIF}$, the standard error of `cylinder` has been
-multiplied by 3.26 and it’s $t$-value divided by this number, compared
-with the case when all predictors are uncorrelated. `engine`, `horse`
-and `weight` suffer a similar fate.
+According to $\sqrt{\text{VIF}}$, the standard error of `cylinder` has
+been multiplied by 3.26 and it’s $t$-value divided by this number,
+compared with the case when all predictors are uncorrelated. `engine`,
+`horse` and `weight` suffer a similar fate.
 
 ### Collinearity diagnostics
 
@@ -275,10 +273,11 @@ condition index is low and (b) it shares nothing with other predictors.
 
 The simplified tabular display above can be improved to make the
 patterns of collinearity more visually apparent and to signify warnings
-directly to the eyes. A “tableplot” (Kwan, 2009) is a semi-graphic
-display that presents numerical information in a table using shapes
-proportional to the value in a cell and other visual attributes (shape
-type, color fill, and so forth) to encode other information.
+directly to the eyes. A “tableplot” (Kwan et-al., 2009) is a
+semi-graphic display that presents numerical information in a table
+using shapes proportional to the value in a cell and other visual
+attributes (shape type, color fill, and so forth) to encode other
+information.
 
 For collinearity diagnostics, these show:
 
@@ -390,8 +389,8 @@ the extent to which each variable contributes to collinearity for these
 two near-singular dimensions.
 
 Thus, we see again that Dimension 6 is largely determined by `engine`
-size, with a substantial relation to `cylinder`. Dimension 5 has its’
-strongest relations to `Weight` and `horse`.
+size, with a substantial (negative) relation to `cylinder`. Dimension 5
+has its’ strongest relations to `weight` and `horse`.
 
 Moreover, there is one observation, \#20, that stands out as an outlier
 in predictor space, far from the centroid. It turns out that this
@@ -438,12 +437,12 @@ techniques to address this problem.
 
   - Transform the predictors to uncorrelated principal components
 
-  - use regularization methods such as ridge regression and lasso, which
-    correct for collinearity by introducing a small amount of bias,
-    shrinking coefficients towards 0. See the
-    [genridge](https://CRAN.R-project.org/package=genridge) and its
-    [`pkgdown` documentation](https://friendly.github.io/genridge/) for
-    visualization methods.
+  - use **regularization methods** such as ridge regression and lasso,
+    which correct for collinearity by introducing shrinking coefficients
+    towards 0, introducing a small amount of bias, . See the
+    [genridge](https://CRAN.R-project.org/package=genridge) package and
+    its [`pkgdown` documentation](https://friendly.github.io/genridge/)
+    for visualization methods.
 
   - use Bayesian regression; if multicollinearity prevents a regression
     coefficient from being estimated precisely, then a prior on that
@@ -467,3 +466,7 @@ Application to Principal Components Analysis. *Biometrics*, **58**,
 453–467.
 
 Gower, J. C., & Hand, D. J. (1996). *Biplots*. London: Chapman & Hall.
+
+Kwan, E., Lu, I. R. R., & Friendly, M. (2009). Tableplot: A new tool for
+assessing precise predictions. *Zeitschrift Für Psychologie / Journal of
+Psychology*, **217**, 38–48.

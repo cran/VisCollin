@@ -8,8 +8,6 @@
 #  -- made gap.list an internal function
 
 ## TODO:
-# DONE table.plot() should be renamed tableplot() and made object-oriented
-#    (tableplot.default) to facilitate extensions for other types of table/matrix inputs
 # DONE  Arguments values and types should be renamed values and types
 # -- The function should use rownames() and colnames() to set default labels
 #    for a matrix argument, when these are available
@@ -17,6 +15,7 @@
 # -- Should allow to automatically round or format the values printed in the cells
 # -- title should either be NULL by default or use deparse(substitute(values)) to
 #    print "Tableplot of X"
+# DONE Fix the viewports so tableplot does not produce many images, requiring knitr option fig.keep="last"
 
 #' Tableplot: A Semi-graphic Display of a Table
 #'
@@ -80,6 +79,18 @@
 #' (cd <- colldiag(cars.mod, center=TRUE))
 #' tableplot(cd, title = "Tableplot of cars data", cond.max = 30 )
 #'
+#' data(baseball, package = "corrgram")
+#'
+#' baseball$Years7 <- pmin(baseball$Years,7)
+#'
+#' base.mod <- lm(logSal ~ Years7 + Atbatc + Hitsc + Homerc + Runsc + RBIc + Walksc,
+#'                data=baseball)
+#' car::vif(base.mod)
+#'
+#' cd <- colldiag(base.mod, center=TRUE)
+#' tableplot(cd)
+
+
 tableplot <-
   function(values,  ...) UseMethod("tableplot")
 
@@ -164,7 +175,7 @@ tableplot.default <- function(
 	L3 <- grid.layout(dim(values)[1],dim(values)[2],respect=T,just=c("left","top"))
 	pushViewport(viewport(layout.pos.col=2))			## Push col 2 of Layout 2;
 
-	#---Push Layout 3, but with adjustments to accomodate possible partitions.
+	#---Push Layout 3, but with adjustments to accommodate possible partitions.
 
 	pushViewport(viewport(layout=L3, x=0, y=1,
 				    just=c(0,1),
